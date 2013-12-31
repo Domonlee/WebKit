@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.webkit.URLUtil;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,10 +24,10 @@ public class HomeActivity extends Activity {
 	private WebView webView;
 	private EditText webUrltText;
 	private Button webUrlGotoBtn;
-	
-	//计时功能
+
+	// 计时功能
 	private static boolean isExit = false;
-	private static Handler handler = new Handler(){
+	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(android.os.Message msg) {
 			super.handleMessage(msg);
@@ -36,21 +38,23 @@ public class HomeActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Window window = HomeActivity.this.getWindow();
+		requestWindowFeature(window.FEATURE_NO_TITLE);
+		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 		setContentView(R.layout.activity_home);
 
+		webView = (WebView) findViewById(R.id.webview);
+		webUrltText = (EditText) findViewById(R.id.web_Url_addr);
+		webUrlGotoBtn = (Button) findViewById(R.id.GotoBtn);
 
-		findViewById();
 		new BtnClickedListener();
 		// 将webview作为默认的网页显示
 		webView.setWebViewClient(new MyWebViewClient());
 
-	}
-	
-	private void findViewById() {
-		
-		webView = (WebView) findViewById(R.id.webview);
-		webUrltText = (EditText) findViewById(R.id.web_Url_addr);
-		webUrlGotoBtn = (Button) findViewById(R.id.GotoBtn);
+		webUrlGotoBtn.setOnClickListener(new BtnClickedListener());
+
 	}
 
 	private class BtnClickedListener implements OnClickListener {
@@ -117,8 +121,7 @@ public class HomeActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "再按一次退出程序",
 						Toast.LENGTH_LONG).show();
 				handler.sendEmptyMessageDelayed(0, 2000);
-			}
-			else {
+			} else {
 				finish();
 				System.exit(0);
 			}
