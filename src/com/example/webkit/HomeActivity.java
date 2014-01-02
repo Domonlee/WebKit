@@ -56,11 +56,13 @@ public class HomeActivity extends Activity {
 		webUrltText = (EditText) findViewById(R.id.web_Url_addr);
 		webUrlGotoBtn = (Button) findViewById(R.id.GotoBtn);
 		
+		webUrlLayout = (LinearLayout)findViewById(R.id.web_Url_Layout);
 		
 		// 将webview作为默认的网页显示
 		webView.setWebViewClient(new MyWebViewClient());
 
 		webUrlGotoBtn.setOnClickListener(new BtnClickedListener());
+		
 	}
 
 	private class BtnClickedListener implements OnClickListener {
@@ -129,14 +131,17 @@ public class HomeActivity extends Activity {
 			view.loadUrl(url);
 			return true;
 		}
-
+		
 		//加载完成后隐藏地址栏
 		@Override
 		public void onPageFinished(WebView view, String url) {
+			
 			super.onPageFinished(view, url);
-			//隐藏地址栏
 			webUrlLayout.setVisibility(View.GONE);
 		}
+
+
+
 	}
 
 	//菜单
