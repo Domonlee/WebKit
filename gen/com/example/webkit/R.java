@@ -21,7 +21,35 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int dialog_back=0x7f020000;
+        public static final int favandhis_activity=0x7f020001;
+        public static final int favorites_button=0x7f020002;
+        public static final int favorites_button_keydown=0x7f020003;
+        public static final int favorites_button_normal=0x7f020004;
+        public static final int home_button=0x7f020005;
+        public static final int home_button_keydown=0x7f020006;
+        public static final int home_button_normal=0x7f020007;
+        public static final int ic_launcher=0x7f020008;
+        public static final int next_button=0x7f020009;
+        public static final int next_button_keydown=0x7f02000a;
+        public static final int next_button_normal=0x7f02000b;
+        public static final int next_button_unavailable=0x7f02000c;
+        public static final int pre_button=0x7f02000d;
+        public static final int pre_button_keydown=0x7f02000e;
+        public static final int pre_button_normal=0x7f02000f;
+        public static final int pre_button_unavailable=0x7f020010;
+        public static final int search_back=0x7f020011;
+        public static final int search_button=0x7f020012;
+        public static final int tabactivity_back=0x7f020013;
+        public static final int tabactivity_background=0x7f020014;
+        public static final int tools_back=0x7f020015;
+        public static final int tools_button=0x7f020016;
+        public static final int tools_button_keydown=0x7f020017;
+        public static final int tools_button_normal=0x7f020018;
+        public static final int url_divider=0x7f020019;
+        public static final int window_button=0x7f02001a;
+        public static final int window_button_keydown=0x7f02001b;
+        public static final int window_button_normal=0x7f02001c;
     }
     public static final class id {
         public static final int GotoBtn=0x7f080002;

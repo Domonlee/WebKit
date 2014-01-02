@@ -1,22 +1,24 @@
 package com.example.webkit;
 
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.view.KeyEvent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.URLUtil;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class HomeActivity extends Activity {
@@ -24,12 +26,17 @@ public class HomeActivity extends Activity {
 	private WebView webView;
 	private EditText webUrltText;
 	private Button webUrlGotoBtn;
+	
+	private LinearLayout webUrlLayout;
+
+	// 网址
+	private String url = "";
 
 	// 计时功能
 	private static boolean isExit = false;
 	private static Handler handler = new Handler() {
 		@Override
-		public void handleMessage(android.os.Message msg) {
+		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			isExit = false;
 		}
@@ -48,13 +55,12 @@ public class HomeActivity extends Activity {
 		webView = (WebView) findViewById(R.id.webview);
 		webUrltText = (EditText) findViewById(R.id.web_Url_addr);
 		webUrlGotoBtn = (Button) findViewById(R.id.GotoBtn);
-
-		new BtnClickedListener();
+		
+		
 		// 将webview作为默认的网页显示
 		webView.setWebViewClient(new MyWebViewClient());
 
 		webUrlGotoBtn.setOnClickListener(new BtnClickedListener());
-
 	}
 
 	private class BtnClickedListener implements OnClickListener {
@@ -74,59 +80,98 @@ public class HomeActivity extends Activity {
 		}
 	}
 
+	/**
+	 * TextWatcher
+	 * 
+	 * @author Domon 实时检测url的合法性
+	 * 
+	 */
+	private class WebUrlChangedListener implements TextWatcher {
+
+		@Override
+		public void afterTextChanged(Editable s) {
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+
+			url = s.toString();
+			if (!(url.startsWith("http://")) || (url.startsWith("https://"))) {
+				url = "http://" + url;
+			}
+			Log.d("Domon", "OnchangeText:" + url);
+
+			if (URLUtil.isNetworkUrl(url) && URLUtil.isValidUrl(url)) {
+				// changeStatueOfWebUrlGotoBtn(true);
+			} else {
+				// changeStatueOfWebUrlGotoBtn(false);
+			}
+		}
+
+	}
+
+	/**
+	 * 通过自己的webView来显示所有网页,需要override WebViewClient
+	 * 
+	 * @author Domon
+	 * 
+	 */
 	private class MyWebViewClient extends WebViewClient {
 
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			// 若webview得到的地址和我的网站一样,返回false,同样的可以在当前的的webview打开其他的链接
-			if (Uri.parse(url).getHost().equals("www.domon.cn")) {
-				return false;
-			}
-			// 否则在新的默认的浏览器中打开网页
-			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-			startActivity(intent);
+			view.loadUrl(url);
 			return true;
+		}
+
+		//加载完成后隐藏地址栏
+		@Override
+		public void onPageFinished(WebView view, String url) {
+			super.onPageFinished(view, url);
+			//隐藏地址栏
+			webUrlLayout.setVisibility(View.GONE);
 		}
 	}
 
-	// // 捕获返回键,若不捕获返回,则默认的情况是退出当前Activity.
-	// @Override
-	// public boolean onKeyDown(int keyCode, KeyEvent event) {
-	// // TODO Auto-generated method stub
-	// if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
-	// // 若按键为返回键,而且当前的webview可以返回,则返回上一次界面
-	// webView.goBack();
-	// }
-	// return super.onKeyDown(keyCode, event);
-	// }
-
+	//菜单
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.home, menu);
 		return true;
 	}
 
-	/**
-	 * @param 判断网页是否能返回
+	/*
+	 *  判断网页是否能返回
 	 *            ,不能返回的话连续两次退出键 退出程序
 	 */
 	@Override
 	public void onBackPressed() {
+		// 判断是否可退
 		if (webView.canGoBack()) {
 			webView.goBack();
+			// 也可以在其中更改其他按钮状态
 		} else {
 			if (!isExit) {
 				isExit = true;
 				Toast.makeText(getApplicationContext(), "再按一次退出程序",
 						Toast.LENGTH_LONG).show();
+				// 2s判定
 				handler.sendEmptyMessageDelayed(0, 2000);
 			} else {
 				finish();
 				System.exit(0);
 			}
 		}
-		super.onBackPressed();
 	}
-
+	
+	/*
+	 * 手势的实现  上滑到顶部显示地址栏,向下滑到底部,隐藏地址栏
+	 */
+	
+	
 }
