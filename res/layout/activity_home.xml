@@ -2,21 +2,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".HomeActivity" >
 
     <LinearLayout
         android:id="@+id/web_Url_Layout"
         android:layout_width="match_parent"
         android:layout_height="46dp"
-        android:orientation="horizontal" >
+        android:background="@android:color/holo_blue_light"
+        android:orientation="horizontal"
+        tools:ignore="NewApi" >
 
         <EditText
             android:id="@+id/web_Url_addr"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="36dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_weight="8"
+	        android:paddingLeft="5dp"
             android:background="@drawable/search_back"
             android:hint="@string/webUrlHint"
             android:inputType="textUri" />
@@ -36,7 +40,7 @@
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_below="@+id/web_Url_Layout"
+        android:layout_below="@id/web_Url_Layout"
         android:layout_marginTop="5dp"
         android:visibility="gone"
         android:progress="0" 

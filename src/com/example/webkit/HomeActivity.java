@@ -36,7 +36,7 @@ public class HomeActivity extends Activity {
 	private Button gotoButton;
 	private ChromeClient webChromeClient;
 	private WebSettings webSettings;
-	
+
 	// 网页地址和按键布局
 	private LinearLayout webUrlLayout;
 
@@ -88,7 +88,7 @@ public class HomeActivity extends Activity {
 		// 加载进度条,百分之百自动隐藏
 		webChromeClient = new ChromeClient();
 		webView.setWebChromeClient(webChromeClient);
-		
+
 		// 获得配置,并设置
 		webSettings = webView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
@@ -118,8 +118,8 @@ public class HomeActivity extends Activity {
 		homeButton.setOnClickListener(btnClickedListener);
 		tabsButton.setOnClickListener(btnClickedListener);
 		moreButton.setOnClickListener(btnClickedListener);
-		
-		this.progressBar.setVisibility(View.GONE);
+
+		progressBar.setVisibility(View.GONE);
 
 	}
 
@@ -134,7 +134,7 @@ public class HomeActivity extends Activity {
 		homeButton = (Button) findViewById(R.id.Home_Btn);
 		tabsButton = (Button) findViewById(R.id.Tabs_Btn);
 		moreButton = (Button) findViewById(R.id.More_Btn);
-		progressBar = (ProgressBar) findViewById(R.id.Progbar);
+		progressBar = (ProgressBar) findViewById(R.id.webProgressBar);
 	}
 
 	/*
@@ -166,7 +166,22 @@ public class HomeActivity extends Activity {
 				}
 			}
 			// 得到返回按键
-			if (v.getId() == R.id.Pre_Btn) {
+			else if (v.getId() == R.id.Pre_Btn) {
+				if (webView.canGoBack()) {
+					webView.goBack();
+				}
+			} else if (v.getId() == R.id.Next_Btn) {
+				if (webView.canGoForward()) {
+					webView.goForward();
+				}
+			} else if (v.getId() == R.id.Home_Btn) {
+				webView.loadUrl("http://www.baidu.com");
+			} else if (v.getId() == R.id.Tabs_Btn) {
+				Toast.makeText(getApplicationContext(), "正在开发中...",
+						Toast.LENGTH_SHORT).show();
+			} else if (v.getId() == R.id.More_Btn) {
+				Toast.makeText(getApplicationContext(), "正在开发中...",
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -333,13 +348,13 @@ public class HomeActivity extends Activity {
 	 * 设置是否可以点击向前向后按钮
 	 */
 	private void StatueOfPreAndNextBtns() {
-		//可返回,返回按钮可点击,否则不可以
+		// 可返回,返回按钮可点击,否则不可以
 		if (webView.canGoBack()) {
 			preButton.setEnabled(true);
 		} else {
 			preButton.setEnabled(false);
 		}
-		//可进入,进入按钮可点击,否则不可以
+		// 可进入,进入按钮可点击,否则不可以
 		if (webView.canGoForward()) {
 			nextButton.setEnabled(true);
 		} else {
