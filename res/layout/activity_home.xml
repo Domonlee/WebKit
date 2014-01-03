@@ -7,14 +7,17 @@
     <LinearLayout
         android:id="@+id/web_Url_Layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
         android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/web_Url_addr"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:layout_weight="8"
+            android:background="@drawable/search_back"
             android:hint="@string/webUrlHint"
             android:inputType="textUri" />
 
@@ -22,16 +25,80 @@
             android:id="@+id/GotoBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:layout_weight="2"
             android:text="@string/webUrlHintGoto" />
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/webProgressBar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/web_Url_Layout"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        android:progress="0" 
+        ></ProgressBar>
+
     <WebView
         android:id="@+id/webview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/web_Url_Layout" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Btns_Layout"
+        android:layout_below="@id/webProgressBar" />
 
-   
+    <RelativeLayout
+        android:id="@+id/Btns_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/tools_back"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/Pre_Btn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/pre_button" />
+
+        <Button
+            android:id="@+id/Next_Btn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/Pre_Btn"
+            android:background="@drawable/next_button" />
+
+        <Button
+            android:id="@+id/Home_Btn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/home_button" />
+
+        <Button
+            android:id="@+id/Tabs_Btn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/Home_Btn"
+            android:background="@drawable/window_button" />
+
+        <Button
+            android:id="@+id/More_Btn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/Tabs_Btn"
+            android:background="@drawable/tools_button" />
+    </RelativeLayout>
 
 </RelativeLayout>

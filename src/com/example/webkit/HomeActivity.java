@@ -19,20 +19,34 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.URLUtil;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class HomeActivity extends Activity {
 
 	private WebView webView;
 	private EditText webUrltText;
-	private Button webUrlGotoBtn;
-
+	private Button gotoButton;
+	private ChromeClient webChromeClient;
+	private WebSettings webSettings;
+	
+	// 网页地址和按键布局
 	private LinearLayout webUrlLayout;
+
+	// 常用按键
+	private Button preButton;
+	private Button nextButton;
+	private Button homeButton;
+	private Button tabsButton;
+	private Button moreButton;
+	private ProgressBar progressBar;
 
 	// 网址
 	private String url = "";
@@ -46,10 +60,16 @@ public class HomeActivity extends Activity {
 			isExit = false;
 		}
 	};
-	
-	//手势监听
+
+	private MyWebViewClient myWebViewClient;
+	// 手势监听
 	private GestureListener mGestureListener;
 	private GestureDetector mGestureDetector;
+
+	// 监听器
+	private BtnClickedListener btnClickedListener;
+	private WebUrlChangedListener webUrlChangedListener;
+	private WebViewTouchListener webViewTouchListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,22 +78,63 @@ public class HomeActivity extends Activity {
 		requestWindowFeature(window.FEATURE_NO_TITLE);
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
 		setContentView(R.layout.activity_home);
-
-		webView = (WebView) findViewById(R.id.webview);
-		webUrltText = (EditText) findViewById(R.id.web_Url_addr);
-		webUrlGotoBtn = (Button) findViewById(R.id.GotoBtn);
-		webUrlLayout = (LinearLayout) findViewById(R.id.web_Url_Layout);
+		findViewById();
 
 		// 将webview作为默认的网页显示
-		webView.setWebViewClient(new MyWebViewClient());
+		myWebViewClient = new MyWebViewClient();
+		webView.setWebViewClient(myWebViewClient);
 
-		webUrlGotoBtn.setOnClickListener(new BtnClickedListener());
-		webView.setOnTouchListener(new WebViewTouchListener());
+		// 加载进度条,百分之百自动隐藏
+		webChromeClient = new ChromeClient();
+		webView.setWebChromeClient(webChromeClient);
+		
+		// 获得配置,并设置
+		webSettings = webView.getSettings();
+		webSettings.setJavaScriptEnabled(true);
+
+		// 为进入按键设置事件
+		btnClickedListener = new BtnClickedListener();
+		gotoButton.setOnClickListener(btnClickedListener);
+
+		// 获得webview的触摸
+		webViewTouchListener = new WebViewTouchListener();
+		webView.setOnTouchListener(webViewTouchListener);
+
+		// 将触摸交给GestureListener处理
 		mGestureListener = new GestureListener();
 		mGestureDetector = new GestureDetector(this, mGestureListener);
+
+		// 为地址栏添加绑定事件,检查地址是否合法,以及自动补全
+		webUrlChangedListener = new WebUrlChangedListener();
+		webUrltText.addTextChangedListener(webUrlChangedListener);
+
+		preButton.setEnabled(false);
+		nextButton.setEnabled(false);
+
+		// 为常用按键绑定Listener
+		preButton.setOnClickListener(btnClickedListener);
+		nextButton.setOnClickListener(btnClickedListener);
+		homeButton.setOnClickListener(btnClickedListener);
+		tabsButton.setOnClickListener(btnClickedListener);
+		moreButton.setOnClickListener(btnClickedListener);
 		
+		this.progressBar.setVisibility(View.GONE);
+
+	}
+
+	// 获取控件
+	private void findViewById() {
+		webView = (WebView) findViewById(R.id.webview);
+		webUrltText = (EditText) findViewById(R.id.web_Url_addr);
+		gotoButton = (Button) findViewById(R.id.GotoBtn);
+		webUrlLayout = (LinearLayout) findViewById(R.id.web_Url_Layout);
+		preButton = (Button) findViewById(R.id.Pre_Btn);
+		nextButton = (Button) findViewById(R.id.Next_Btn);
+		homeButton = (Button) findViewById(R.id.Home_Btn);
+		tabsButton = (Button) findViewById(R.id.Tabs_Btn);
+		moreButton = (Button) findViewById(R.id.More_Btn);
+		progressBar = (ProgressBar) findViewById(R.id.Progbar);
 	}
 
 	/*
@@ -89,22 +150,29 @@ public class HomeActivity extends Activity {
 				if (URLUtil.isNetworkUrl(url) && URLUtil.isValidUrl(url)) {
 					webView.loadUrl(url);
 				} else {
-					//弹出对话框提示用户
-					new AlertDialog.Builder(HomeActivity.this).setTitle("警告")
+					// 弹出对话框提示用户
+					new AlertDialog.Builder(HomeActivity.this)
+							.setTitle("警告")
 							.setMessage("不是有效的网址!" + "\n" + "请返回重新输入~")
-							.setPositiveButton("返回", new AlertDialog.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.dismiss();
-								}
-							}).create().show();
+							.setPositiveButton("返回",
+									new AlertDialog.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											dialog.dismiss();
+										}
+									}).create().show();
 				}
+			}
+			// 得到返回按键
+			if (v.getId() == R.id.Pre_Btn) {
 			}
 		}
 	}
 
 	/*
-	 * TextWatcher  实时检测url的合法性
+	 * TextWatcher 实时检测url的合法性
 	 */
 	private class WebUrlChangedListener implements TextWatcher {
 
@@ -125,9 +193,8 @@ public class HomeActivity extends Activity {
 			if (!(url.startsWith("http://")) || (url.startsWith("https://"))) {
 				url = "http://" + url;
 			}
-			Log.d("Domon", "OnchangeText:" + url);
-			
 			if (URLUtil.isNetworkUrl(url) && URLUtil.isValidUrl(url)) {
+
 				// changeStatueOfWebUrlGotoBtn(true);
 			} else {
 				// changeStatueOfWebUrlGotoBtn(false);
@@ -151,7 +218,9 @@ public class HomeActivity extends Activity {
 		public void onPageFinished(WebView view, String url) {
 
 			super.onPageFinished(view, url);
+			webUrltText.setText(url);
 			webUrlLayout.setVisibility(View.GONE);
+			StatueOfPreAndNextBtns();
 		}
 
 	}
@@ -188,7 +257,7 @@ public class HomeActivity extends Activity {
 	/*
 	 * 手势的实现 上滑到顶部显示地址栏,向下滑到底部,隐藏地址栏
 	 */
-	private class GestureListener implements OnGestureListener{
+	private class GestureListener implements OnGestureListener {
 
 		@Override
 		public boolean onDown(MotionEvent e) {
@@ -199,11 +268,11 @@ public class HomeActivity extends Activity {
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
 			if (webView.getScrollY() == 0) {
-				//滑倒顶部
+				// 滑倒顶部
 				webUrlLayout.setVisibility(View.VISIBLE);
 			}
 			if (webView.getScrollY() > 0) {
-				//滑倒底部
+				// 滑倒底部
 				webUrlLayout.setVisibility(View.GONE);
 			}
 			return true;
@@ -232,16 +301,49 @@ public class HomeActivity extends Activity {
 	/*
 	 * 自定义oTouchListener 将手势交给GestureListener解决
 	 */
-	
-	private class WebViewTouchListener implements OnTouchListener{
+
+	private class WebViewTouchListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if (v.getId() == R.id.webview) {
-				return mGestureListener.onTouchEvent(event);
+				return mGestureDetector.onTouchEvent(event);
 			}
 			return false;
 		}
-		
+	}
+
+	/*
+	 * WebChromeClient自定义继承类 override onProgressChanged
+	 */
+	private class ChromeClient extends WebChromeClient {
+		@Override
+		public void onProgressChanged(WebView view, int newProgress) {
+			super.onProgressChanged(view, newProgress);
+			if (newProgress == 100) {
+				progressBar.setVisibility(view.GONE);
+			} else {
+				progressBar.setVisibility(View.VISIBLE);
+				progressBar.setProgress(newProgress);
+			}
+		}
+	}
+
+	/*
+	 * 设置是否可以点击向前向后按钮
+	 */
+	private void StatueOfPreAndNextBtns() {
+		//可返回,返回按钮可点击,否则不可以
+		if (webView.canGoBack()) {
+			preButton.setEnabled(true);
+		} else {
+			preButton.setEnabled(false);
+		}
+		//可进入,进入按钮可点击,否则不可以
+		if (webView.canGoForward()) {
+			nextButton.setEnabled(true);
+		} else {
+			nextButton.setEnabled(false);
+		}
 	}
 }

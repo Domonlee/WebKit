@@ -15,23 +15,23 @@ public class LoadActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		Window window = LoadActivity.this.getWindow();
 		window.requestFeature(Window.FEATURE_NO_TITLE);
-		
-		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.activity_load);
-		
+
 		new Handler().postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				Intent intent = new Intent();
 				intent.setClass(getApplicationContext(), HomeActivity.class);
 				startActivity(intent);
 				finish();
-				
 			}
 		}, LOAD_TIME);
 	}
