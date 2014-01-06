@@ -1,7 +1,10 @@
 package com.example.webkit;
 
+import com.example.Other.MorePopWindows;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +14,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,6 +52,9 @@ public class HomeActivity extends Activity {
 	private Button tabsButton;
 	private Button moreButton;
 	private ProgressBar progressBar;
+
+	// 获取更多按钮弹出窗口
+	private MorePopWindows morePopWindows;
 
 	// 网址
 	private String url = "";
@@ -121,6 +129,10 @@ public class HomeActivity extends Activity {
 
 		progressBar.setVisibility(View.GONE);
 
+		// morePopWindows = new MorePopWindows(getApplicationContext(),
+		// getWindowManager().getDefaultDisplay().getWidth() - 30,
+		// getWindowManager().getDefaultDisplay().getHeight() / 3);
+
 	}
 
 	// 获取控件
@@ -180,8 +192,6 @@ public class HomeActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "正在开发中...",
 						Toast.LENGTH_SHORT).show();
 			} else if (v.getId() == R.id.More_Btn) {
-				Toast.makeText(getApplicationContext(), "正在开发中...",
-						Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

@@ -12,7 +12,8 @@
         android:id="@+id/Progbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@android:style/Widget.ProgressBar"
+        android:background="@drawable/image_progress"
+        android:indeterminate="true"
         android:layout_centerInParent="true"
         />
     

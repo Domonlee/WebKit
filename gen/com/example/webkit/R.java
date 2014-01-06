@@ -30,26 +30,28 @@ public final class R {
         public static final int home_button_keydown=0x7f020006;
         public static final int home_button_normal=0x7f020007;
         public static final int ic_launcher=0x7f020008;
-        public static final int next_button=0x7f020009;
-        public static final int next_button_keydown=0x7f02000a;
-        public static final int next_button_normal=0x7f02000b;
-        public static final int next_button_unavailable=0x7f02000c;
-        public static final int pre_button=0x7f02000d;
-        public static final int pre_button_keydown=0x7f02000e;
-        public static final int pre_button_normal=0x7f02000f;
-        public static final int pre_button_unavailable=0x7f020010;
-        public static final int search_back=0x7f020011;
-        public static final int search_button=0x7f020012;
-        public static final int tabactivity_back=0x7f020013;
-        public static final int tabactivity_background=0x7f020014;
-        public static final int tools_back=0x7f020015;
-        public static final int tools_button=0x7f020016;
-        public static final int tools_button_keydown=0x7f020017;
-        public static final int tools_button_normal=0x7f020018;
-        public static final int url_divider=0x7f020019;
-        public static final int window_button=0x7f02001a;
-        public static final int window_button_keydown=0x7f02001b;
-        public static final int window_button_normal=0x7f02001c;
+        public static final int image_progress=0x7f020009;
+        public static final int next_button=0x7f02000a;
+        public static final int next_button_keydown=0x7f02000b;
+        public static final int next_button_normal=0x7f02000c;
+        public static final int next_button_unavailable=0x7f02000d;
+        public static final int pre_button=0x7f02000e;
+        public static final int pre_button_keydown=0x7f02000f;
+        public static final int pre_button_normal=0x7f020010;
+        public static final int pre_button_unavailable=0x7f020011;
+        public static final int progressbar=0x7f020012;
+        public static final int search_back=0x7f020013;
+        public static final int search_button=0x7f020014;
+        public static final int tabactivity_back=0x7f020015;
+        public static final int tabactivity_background=0x7f020016;
+        public static final int tools_back=0x7f020017;
+        public static final int tools_button=0x7f020018;
+        public static final int tools_button_keydown=0x7f020019;
+        public static final int tools_button_normal=0x7f02001a;
+        public static final int url_divider=0x7f02001b;
+        public static final int window_button=0x7f02001c;
+        public static final int window_button_keydown=0x7f02001d;
+        public static final int window_button_normal=0x7f02001e;
     }
     public static final class id {
         public static final int Btns_Layout=0x7f080005;
@@ -59,8 +61,13 @@ public final class R {
         public static final int Next_Btn=0x7f080007;
         public static final int Pre_Btn=0x7f080006;
         public static final int Progbar=0x7f08000b;
+        public static final int Refresh_Btn=0x7f080010;
         public static final int Tabs_Btn=0x7f080009;
-        public static final int action_settings=0x7f08000c;
+        public static final int action_settings=0x7f080011;
+        public static final int more_normal=0x7f08000c;
+        public static final int more_normal_refresh=0x7f08000d;
+        public static final int more_setting=0x7f08000e;
+        public static final int more_tools=0x7f08000f;
         public static final int webProgressBar=0x7f080003;
         public static final int web_Url_Layout=0x7f080000;
         public static final int web_Url_addr=0x7f080001;
@@ -69,6 +76,8 @@ public final class R {
     public static final class layout {
         public static final int activity_home=0x7f030000;
         public static final int activity_load=0x7f030001;
+        public static final int activity_tabs=0x7f030002;
+        public static final int more_btn_layout=0x7f030003;
     }
     public static final class menu {
         public static final int home=0x7f070000;
