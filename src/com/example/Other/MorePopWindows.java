@@ -9,10 +9,10 @@ import android.widget.PopupWindow;
 import android.widget.TabHost;
 
 public class MorePopWindows extends PopupWindow {
-	private TabHost moreTabHost;
+	private TabHost toolsTab;
 	private Context context;
-	private LayoutInflater moreInflater;
-	private View moreTabView;
+	private LayoutInflater toolsTabInflater;
+	private View toolsTabView;
 
 	/*
 	 * 输入宽高和上下文对象
@@ -20,7 +20,7 @@ public class MorePopWindows extends PopupWindow {
 	public MorePopWindows(Context context, int width, int height) {
 		super(context);
 		this.context = context;
-		moreInflater = LayoutInflater.from(context);
+		toolsTabInflater = LayoutInflater.from(this.context);
 
 		initTab();
 
@@ -31,29 +31,29 @@ public class MorePopWindows extends PopupWindow {
 		setOutsideTouchable(true);
 		setFocusable(true);
 
-		setContentView(moreTabView);
+		setContentView(toolsTabView);
 	}
 
 	// 实例化标签
 	private void initTab() {
-		moreTabView = moreInflater.inflate(R.layout.activity_tabs, null);
+		toolsTabView = toolsTabInflater.inflate(R.layout.activity_tabs, null);
 		// 获取tabhost
-		moreTabHost = (TabHost) moreTabView.findViewById(android.R.id.tabhost);
+		toolsTab = (TabHost) toolsTabView.findViewById(android.R.id.tabhost);
 		// 使用findViewById()加载tabhost时在调用addTab前必须调用
-		moreTabHost.setup(); 
+		toolsTab.setup(); 
 
-		moreTabHost.addTab(this.moreTabHost.newTabSpec("normal")
+		toolsTab.addTab(this.toolsTab.newTabSpec("normal")
 				.setIndicator("常用").setContent(R.id.more_normal));
-		this.moreTabHost.addTab(this.moreTabHost.newTabSpec("setttings")
+		toolsTab.addTab(this.toolsTab.newTabSpec("setttings")
 				.setIndicator("设置").setContent(R.id.more_setting));
-		this.moreTabHost.addTab(this.moreTabHost.newTabSpec("tool")
+		toolsTab.addTab(this.toolsTab.newTabSpec("tool")
 				.setIndicator("工具").setContent(R.id.more_tools));
 		
 		// 设置默认选种标签
-		this.moreTabHost.setCurrentTab(0); 
+		toolsTab.setCurrentTab(0); 
 	}
 
 	public View getView(int id) {
-		return this.moreTabView.findViewById(id);
+		return this.toolsTabView.findViewById(id);
 	}
 }

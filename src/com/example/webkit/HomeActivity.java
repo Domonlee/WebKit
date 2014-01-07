@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +18,7 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -79,6 +81,10 @@ public class HomeActivity extends Activity {
 	private WebUrlChangedListener webUrlChangedListener;
 	private WebViewTouchListener webViewTouchListener;
 
+	// 菜单
+	private static int FIRST = Menu.FIRST;
+	private static int SECOND = Menu.FIRST + 1;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -129,9 +135,9 @@ public class HomeActivity extends Activity {
 
 		progressBar.setVisibility(View.GONE);
 
-		// morePopWindows = new MorePopWindows(getApplicationContext(),
-		// getWindowManager().getDefaultDisplay().getWidth() - 30,
-		// getWindowManager().getDefaultDisplay().getHeight() / 3);
+		morePopWindows = new MorePopWindows(getApplicationContext(),
+				getWindowManager().getDefaultDisplay().getWidth() - 30,
+				getWindowManager().getDefaultDisplay().getHeight() / 3);
 
 	}
 
@@ -192,6 +198,13 @@ public class HomeActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "正在开发中...",
 						Toast.LENGTH_SHORT).show();
 			} else if (v.getId() == R.id.More_Btn) {
+				LayoutInflater toolsInflater = LayoutInflater
+						.from(getApplicationContext());
+				View toolsView = toolsInflater.inflate(
+						R.layout.more_btn_layout, null);
+				morePopWindows.showAtLocation(toolsView, Gravity.BOTTOM
+						| Gravity.CENTER_HORIZONTAL, 0,
+						moreButton.getHeight() + 20);
 			}
 		}
 	}
@@ -253,7 +266,59 @@ public class HomeActivity extends Activity {
 	// 菜单
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, FIRST, 1, "关于");
+		menu.add(0, SECOND, 2, "退出");
 		return true;
+	}
+
+	// 菜单选择
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST: {
+			new AlertDialog.Builder(HomeActivity.this)
+					.setTitle("关于")
+					.setMessage(
+							"Android简易浏览器" + "\n" + "制作者: 李钊" + "\n"
+									+ "项目地址https://github.com/Domonlee/WebKit"
+									+ "\n" + "联系方式:viplizhao@gmail.com ")
+					.setPositiveButton("返回",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+								}
+							}).create().show();
+			break;
+		}
+		case Menu.FIRST + 1: {
+			new AlertDialog.Builder(HomeActivity.this)
+					.setTitle("提示")
+					.setMessage("确认退出吗?")
+					.setPositiveButton("确认",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+									HomeActivity.this.finish();
+								}
+							})
+					.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+								}
+							}).create().show();
+		}
+			break;
+		default:
+			break;
+		}
+		return super.onMenuItemSelected(featureId, item);
 	}
 
 	/*
