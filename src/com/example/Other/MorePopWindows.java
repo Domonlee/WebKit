@@ -20,37 +20,39 @@ public class MorePopWindows extends PopupWindow {
 	public MorePopWindows(Context context, int width, int height) {
 		super(context);
 		this.context = context;
-		toolsTabInflater = LayoutInflater.from(this.context);
+		this.toolsTabInflater = LayoutInflater.from(this.context);
 
-		initTab();
+		this.initTab();
 
-		//设置宽高
+		// 设置宽高
 		setWidth(width);
 		setHeight(height);
 
+		setContentView(toolsTabView);
 		setOutsideTouchable(true);
 		setFocusable(true);
 
-		setContentView(toolsTabView);
 	}
 
 	// 实例化标签
 	private void initTab() {
-		toolsTabView = toolsTabInflater.inflate(R.layout.activity_tabs, null);
+		this.toolsTabView = this.toolsTabInflater.inflate(
+				R.layout.activity_tabs, null);
 		// 获取tabhost
-		toolsTab = (TabHost) toolsTabView.findViewById(android.R.id.tabhost);
+		this.toolsTab = (TabHost) this.toolsTabView
+				.findViewById(android.R.id.tabhost);
 		// 使用findViewById()加载tabhost时在调用addTab前必须调用
-		toolsTab.setup(); 
+		this.toolsTab.setup();
 
-		toolsTab.addTab(this.toolsTab.newTabSpec("normal")
+		this.toolsTab.addTab(this.toolsTab.newTabSpec("normal")
 				.setIndicator("常用").setContent(R.id.more_normal));
-		toolsTab.addTab(this.toolsTab.newTabSpec("setttings")
+		this.toolsTab.addTab(this.toolsTab.newTabSpec("setttings")
 				.setIndicator("设置").setContent(R.id.more_setting));
-		toolsTab.addTab(this.toolsTab.newTabSpec("tool")
+		this.toolsTab.addTab(this.toolsTab.newTabSpec("tool")
 				.setIndicator("工具").setContent(R.id.more_tools));
-		
+
 		// 设置默认选种标签
-		toolsTab.setCurrentTab(0); 
+		this.toolsTab.setCurrentTab(0);
 	}
 
 	public View getView(int id) {

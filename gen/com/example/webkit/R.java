@@ -61,9 +61,8 @@ public final class R {
         public static final int Next_Btn=0x7f080007;
         public static final int Pre_Btn=0x7f080006;
         public static final int Progbar=0x7f08000b;
-        public static final int Refresh_Btn=0x7f080010;
         public static final int Tabs_Btn=0x7f080009;
-        public static final int action_settings=0x7f080011;
+        public static final int action_settings=0x7f080010;
         public static final int more_normal=0x7f08000c;
         public static final int more_normal_refresh=0x7f08000d;
         public static final int more_setting=0x7f08000e;
@@ -77,7 +76,6 @@ public final class R {
         public static final int activity_home=0x7f030000;
         public static final int activity_load=0x7f030001;
         public static final int activity_tabs=0x7f030002;
-        public static final int more_btn_layout=0x7f030003;
     }
     public static final class menu {
         public static final int home=0x7f070000;

@@ -53,6 +53,7 @@ public class HomeActivity extends Activity {
 	private Button homeButton;
 	private Button tabsButton;
 	private Button moreButton;
+	private Button moreBtn_normal_refreshButton;
 	private ProgressBar progressBar;
 
 	// 获取更多按钮弹出窗口
@@ -135,9 +136,9 @@ public class HomeActivity extends Activity {
 
 		progressBar.setVisibility(View.GONE);
 
-		morePopWindows = new MorePopWindows(getApplicationContext(),
-				getWindowManager().getDefaultDisplay().getWidth() - 30,
-				getWindowManager().getDefaultDisplay().getHeight() / 3);
+		this.morePopWindows = new MorePopWindows(this, this.getWindowManager()
+				.getDefaultDisplay().getWidth() - 30, this.getWindowManager()
+				.getDefaultDisplay().getHeight() / 3);
 
 	}
 
@@ -195,16 +196,23 @@ public class HomeActivity extends Activity {
 			} else if (v.getId() == R.id.Home_Btn) {
 				webView.loadUrl("http://www.baidu.com");
 			} else if (v.getId() == R.id.Tabs_Btn) {
-				Toast.makeText(getApplicationContext(), "正在开发中...",
+				Toast.makeText(getApplicationContext(), "仍在开发中...",
 						Toast.LENGTH_SHORT).show();
 			} else if (v.getId() == R.id.More_Btn) {
 				LayoutInflater toolsInflater = LayoutInflater
 						.from(getApplicationContext());
-				View toolsView = toolsInflater.inflate(
-						R.layout.more_btn_layout, null);
+				View toolsView = toolsInflater.inflate(R.layout.activity_tabs,
+						null);
 				morePopWindows.showAtLocation(toolsView, Gravity.BOTTOM
 						| Gravity.CENTER_HORIZONTAL, 0,
 						moreButton.getHeight() + 20);
+				moreBtn_normal_refreshButton = (Button) morePopWindows
+						.getView(R.id.more_normal_refresh);
+				moreBtn_normal_refreshButton.setOnClickListener(this);
+			} else if (v.getId() == R.id.more_normal_refresh) {
+				if (!(url.equals("") && url.equals("http://"))) {
+					webView.loadUrl(url);
+				}
 			}
 		}
 	}
@@ -261,87 +269,6 @@ public class HomeActivity extends Activity {
 			StatueOfPreAndNextBtns();
 		}
 
-	}
-
-	// 菜单
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, FIRST, 1, "关于");
-		menu.add(0, SECOND, 2, "退出");
-		return true;
-	}
-
-	// 菜单选择
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case Menu.FIRST: {
-			new AlertDialog.Builder(HomeActivity.this)
-					.setTitle("关于")
-					.setMessage(
-							"Android简易浏览器" + "\n" + "制作者: 李钊" + "\n"
-									+ "项目地址https://github.com/Domonlee/WebKit"
-									+ "\n" + "联系方式:viplizhao@gmail.com ")
-					.setPositiveButton("返回",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									dialog.dismiss();
-								}
-							}).create().show();
-			break;
-		}
-		case Menu.FIRST + 1: {
-			new AlertDialog.Builder(HomeActivity.this)
-					.setTitle("提示")
-					.setMessage("确认退出吗?")
-					.setPositiveButton("确认",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									dialog.dismiss();
-									HomeActivity.this.finish();
-								}
-							})
-					.setNegativeButton("取消",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									dialog.dismiss();
-								}
-							}).create().show();
-		}
-			break;
-		default:
-			break;
-		}
-		return super.onMenuItemSelected(featureId, item);
-	}
-
-	/*
-	 * 判断网页是否能返回 ,不能返回的话连续两次退出键 退出程序
-	 */
-	@Override
-	public void onBackPressed() {
-		// 判断是否可退
-		if (webView.canGoBack()) {
-			webView.goBack();
-			// 也可以在其中更改其他按钮状态
-		} else {
-			if (!isExit) {
-				isExit = true;
-				Toast.makeText(getApplicationContext(), "再按一次退出程序",
-						Toast.LENGTH_LONG).show();
-				// 2s判定
-				handler.sendEmptyMessageDelayed(0, 2000);
-			} else {
-				finish();
-				System.exit(0);
-			}
-		}
 	}
 
 	/*
@@ -435,5 +362,86 @@ public class HomeActivity extends Activity {
 		} else {
 			nextButton.setEnabled(false);
 		}
+	}
+
+	/*
+	 * 判断网页是否能返回 ,不能返回的话连续两次退出键 退出程序
+	 */
+	@Override
+	public void onBackPressed() {
+		// 判断是否可退
+		if (webView.canGoBack()) {
+			webView.goBack();
+			// 也可以在其中更改其他按钮状态
+		} else {
+			if (!isExit) {
+				isExit = true;
+				Toast.makeText(getApplicationContext(), "再按一次退出程序",
+						Toast.LENGTH_LONG).show();
+				// 2s判定
+				handler.sendEmptyMessageDelayed(0, 2000);
+			} else {
+				finish();
+				System.exit(0);
+			}
+		}
+	}
+
+	// 菜单
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, FIRST, 1, "关于");
+		menu.add(0, SECOND, 2, "退出");
+		return true;
+	}
+
+	// 菜单选择
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST: {
+			new AlertDialog.Builder(HomeActivity.this)
+					.setTitle("关于")
+					.setMessage(
+							"Android简易浏览器" + "\n" + "制作者: 李钊" + "\n"
+									+ "项目地址https://github.com/Domonlee/WebKit"
+									+ "\n" + "联系方式:viplizhao@gmail.com ")
+					.setPositiveButton("返回",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+								}
+							}).create().show();
+			break;
+		}
+		case Menu.FIRST + 1: {
+			new AlertDialog.Builder(HomeActivity.this)
+					.setTitle("提示")
+					.setMessage("确认退出吗?")
+					.setPositiveButton("确认",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+									HomeActivity.this.finish();
+								}
+							})
+					.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+								}
+							}).create().show();
+		}
+			break;
+		default:
+			break;
+		}
+		return super.onMenuItemSelected(featureId, item);
 	}
 }
