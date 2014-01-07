@@ -18,6 +18,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.webkit.HomeActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="@string/app_name" >
         </activity>
         <activity

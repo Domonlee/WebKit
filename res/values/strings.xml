@@ -8,5 +8,7 @@
     <string name="welcome">正在载入</string>
     <string name="webUrlHint">请输入地址</string>
     <string name="webUrlHintGoto">进入</string>
+    <string name="more_refresh">刷新</string>
+    <string name="more_full">全屏</string>
 
 </resources>

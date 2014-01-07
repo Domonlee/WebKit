@@ -28,7 +28,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:text="刷新" />
+                android:layout_marginLeft="20dp"
+                android:text="@string/more_refresh" />
+            <Button
+                android:id="@+id/more_normal_full"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/more_normal_refresh"
+                android:layout_marginRight="30dp"
+                android:layout_alignParentBottom="true"
+                android:text="@string/more_full" />
         </RelativeLayout>
 
         <RelativeLayout

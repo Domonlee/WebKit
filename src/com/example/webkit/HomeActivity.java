@@ -4,15 +4,12 @@ import com.example.Other.MorePopWindows;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
@@ -34,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class HomeActivity extends Activity {
@@ -46,6 +44,7 @@ public class HomeActivity extends Activity {
 
 	// 网页地址和按键布局
 	private LinearLayout webUrlLayout;
+	private RelativeLayout btnsLayout;
 
 	// 常用按键
 	private Button preButton;
@@ -54,6 +53,8 @@ public class HomeActivity extends Activity {
 	private Button tabsButton;
 	private Button moreButton;
 	private Button moreBtn_normal_refreshButton;
+	private Button moreBtn_normal_fullButton;
+	private Button fullButton;
 	private ProgressBar progressBar;
 
 	// 获取更多按钮弹出窗口
@@ -93,6 +94,7 @@ public class HomeActivity extends Activity {
 		requestWindowFeature(window.FEATURE_NO_TITLE);
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		setContentView(R.layout.activity_home);
 		findViewById();
 
@@ -107,6 +109,10 @@ public class HomeActivity extends Activity {
 		// 获得配置,并设置
 		webSettings = webView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
+
+		// 设置基本的配置
+		webSettings.setSupportZoom(true);
+		webSettings.setBuiltInZoomControls(true);
 
 		// 为进入按键设置事件
 		btnClickedListener = new BtnClickedListener();
@@ -134,6 +140,8 @@ public class HomeActivity extends Activity {
 		tabsButton.setOnClickListener(btnClickedListener);
 		moreButton.setOnClickListener(btnClickedListener);
 
+		fullButton.setOnClickListener(btnClickedListener);
+
 		progressBar.setVisibility(View.GONE);
 
 		this.morePopWindows = new MorePopWindows(this, this.getWindowManager()
@@ -148,11 +156,13 @@ public class HomeActivity extends Activity {
 		webUrltText = (EditText) findViewById(R.id.web_Url_addr);
 		gotoButton = (Button) findViewById(R.id.GotoBtn);
 		webUrlLayout = (LinearLayout) findViewById(R.id.web_Url_Layout);
+		btnsLayout = (RelativeLayout) findViewById(R.id.Btns_Layout);
 		preButton = (Button) findViewById(R.id.Pre_Btn);
 		nextButton = (Button) findViewById(R.id.Next_Btn);
 		homeButton = (Button) findViewById(R.id.Home_Btn);
 		tabsButton = (Button) findViewById(R.id.Tabs_Btn);
 		moreButton = (Button) findViewById(R.id.More_Btn);
+		fullButton = (Button) findViewById(R.id.Full_Btn);
 		progressBar = (ProgressBar) findViewById(R.id.webProgressBar);
 	}
 
@@ -208,12 +218,24 @@ public class HomeActivity extends Activity {
 						moreButton.getHeight() + 20);
 				moreBtn_normal_refreshButton = (Button) morePopWindows
 						.getView(R.id.more_normal_refresh);
+				moreBtn_normal_fullButton = (Button) morePopWindows
+						.getView(R.id.more_normal_full);
 				moreBtn_normal_refreshButton.setOnClickListener(this);
+				moreBtn_normal_fullButton.setOnClickListener(this);
 			} else if (v.getId() == R.id.more_normal_refresh) {
 				if (!(url.equals("") && url.equals("http://"))) {
 					webView.loadUrl(url);
 				}
+			} else if (v.getId() == R.id.more_normal_full) {
+				webUrlLayout.setVisibility(View.GONE);
+				btnsLayout.setVisibility(View.GONE);
+				fullButton.setVisibility(View.VISIBLE);
+			} else if (v.getId() == R.id.Full_Btn) {
+				webUrlLayout.setVisibility(View.VISIBLE);
+				btnsLayout.setVisibility(View.VISIBLE);
+				fullButton.setVisibility(View.GONE);
 			}
+
 		}
 	}
 
@@ -265,7 +287,7 @@ public class HomeActivity extends Activity {
 
 			super.onPageFinished(view, url);
 			webUrltText.setText(url);
-			webUrlLayout.setVisibility(View.GONE);
+			// webUrlLayout.setVisibility(View.GONE);
 			StatueOfPreAndNextBtns();
 		}
 
